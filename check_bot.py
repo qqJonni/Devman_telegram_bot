@@ -22,7 +22,7 @@ class TelegramBotHandler(logging.Handler):
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
-def check_lesson(timestamp, tokens):
+def egt_lesson_status(timestamp, tokens):
     headers = {'Authorization': f'Token {tokens}'}
     payloads = {'timestamp': timestamp}
     response = requests.get(URL, headers=headers, params=payloads, timeout=120)
@@ -67,12 +67,12 @@ def main():
 
     while True:
         try:
-            check_lesson = check_lesson(timestamp, devman_token)
-            if check_lesson['status'] == 'timeout':
-                timestamp = check_lesson['timestamp_to_request']
+            lesson_status = get_lesson_status(timestamp, devman_token)
+            if lesson_status['status'] == 'timeout':
+                timestamp = lesson_status['timestamp_to_request']
             else:
-                timestamp = check_lesson['last_attempt_timestamp']
-                send_message(bot, check_lesson, telegram_chat_id)
+                timestamp = lesson_status['last_attempt_timestamp']
+                send_message(bot, lesson_status, telegram_chat_id)
         except requests.exceptions.ReadTimeout:
             pass
         except requests.exceptions.ConnectionError:
