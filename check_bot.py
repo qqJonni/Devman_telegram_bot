@@ -22,7 +22,7 @@ class TelegramBotHandler(logging.Handler):
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
-def egt_lesson_status(timestamp, tokens):
+def get_lesson_status(timestamp, tokens):
     headers = {'Authorization': f'Token {tokens}'}
     payloads = {'timestamp': timestamp}
     response = requests.get(URL, headers=headers, params=payloads, timeout=120)
